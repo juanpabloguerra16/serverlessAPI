@@ -34,7 +34,7 @@ jobs:
         with:
           deploymentName: "deploy-environment-${{ github.run_number }}"
           resourceGroupName: ${{ secrets.APPRESOURCEGROUP }}
-          template: ./deployment/app.bicep
+          template: /deployment/app.bicep
           parameters: >
             prefix=${{ env.prefix }}
             branch=${{ github.ref }}
