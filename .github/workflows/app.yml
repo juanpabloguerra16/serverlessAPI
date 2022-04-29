@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  stackName: 'prefix'
+  prefix: 'prefix'
 
 jobs:
   IaC:
