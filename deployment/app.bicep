@@ -18,14 +18,14 @@ var tags = {
 }
 
 resource site 'Microsoft.Web/sites@2021-03-01' = {
-  name: '${stackName}-site'
+  name: '${stackName}-${uniqueString('site')}'
   location: location
   tags: tags
   properties: {}
 }
 
 resource function 'Microsoft.Web/sites/functions@2021-03-01' = {
-  name: '${stackName}-Function'
+  name: '${stackName}-${uniqueString('function')}'
   parent: site
   kind: 'web'
   properties: {}
