@@ -49,6 +49,8 @@ jobs:
           echo test, and deploy your project.
 
   DeployFunction:
+    name: Deploy Function Code
+    needs: IaC
     runs-on: ubuntu-latest
     steps:
 
@@ -71,7 +73,7 @@ jobs:
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
           dotnet build --configuration Release --output ./output
           popd
-          
+
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
         id: fa
