@@ -26,6 +26,8 @@ module function './function.bicep' = {
   }
 }
 
+output functionApp string = function.outputs.functionApp
+
 
 
 
