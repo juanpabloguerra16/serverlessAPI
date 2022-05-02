@@ -2,7 +2,7 @@ param location string = resourceGroup().location
 //param storageAccountName string = 'toylaunch${uniqueString(resourceGroup().id)}'
 param lastUpdated string = utcNow('u')
 param prefix string
-param appEnvironment string = 'Dev'
+param appEnvironment string = 'dev'
 param branch string
 param version string
 
