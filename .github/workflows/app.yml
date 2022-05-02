@@ -11,13 +11,15 @@ on:
 
 env:
   prefix: 'platform'
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './Functions/'    # set this to the path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '6.0'  
 
 jobs:
-  IaC:
-    
+  IaC:    
     runs-on: ubuntu-latest
-
     # Steps represent a sequence of tasks that will be executed as part of the job
+    outputs:
+      AZURE_FUNCTIONAPP_NAME: ${{ steps.build_env.outputs.functionApp }}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
@@ -34,7 +36,7 @@ jobs:
         with:
           deploymentName: "deploy-environment-${{ github.run_number }}"
           resourceGroupName: ${{ secrets.APPRESOURCEGROUP }}
-          template: ./deployment/app.bicep
+          template: ./iac/app.bicep
           parameters: >
             prefix=${{ env.prefix }}
             branch=${{ github.ref }}
@@ -45,3 +47,35 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+
+  DeployFunction:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v3
+
+      - name: Azure CLI Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
+      - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: 'Resolve Project Dependencies Using Dotnet'
+        shell: bash
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet build --configuration Release --output ./output
+          popd
+          
+      - name: 'Run Azure Functions Action'
+        uses: Azure/functions-action@v1
+        id: fa
+        with:
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}

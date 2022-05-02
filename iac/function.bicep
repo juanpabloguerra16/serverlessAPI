@@ -1,21 +1,6 @@
-param location string = resourceGroup().location
-//param storageAccountName string = 'toylaunch${uniqueString(resourceGroup().id)}'
-param lastUpdated string = utcNow('u')
-param prefix string
-param appEnvironment string = 'dev'
-param branch string
-param version string
-
-var stackName = '${prefix}${appEnvironment}'
-
-var tags = {
-  'stack-name': 'platform'
-  'stack-environment': appEnvironment
-  'stack-branch': branch
-  'stack-version': version
-  'stack-last-updated': lastUpdated
-  'stack-sub-name': 'demo'
-}
+param stackName string
+param location string
+param tags object
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   name: '${stackName}jpguerra'
@@ -86,4 +71,4 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
 
 }
 
-
+output functionApp string = functionApp.name
