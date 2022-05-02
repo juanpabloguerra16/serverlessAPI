@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  prefix: 'prefix'
+  prefix: 'platform'
 
 jobs:
   IaC:
