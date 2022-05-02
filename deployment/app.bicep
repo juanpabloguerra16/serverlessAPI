@@ -18,8 +18,9 @@ var tags = {
 }
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
-  name: '${stackName}-jpguerra'
+  name: '${stackName}jpguerra'
   location: location
+  tags: tags
   kind: 'StorageV2'
   sku: {
     name: 'Standard_LRS'
@@ -41,6 +42,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
 resource hostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   name: '${stackName}-apsjp'
   location: location
+  tags: tags
   sku: {
     name: 'Y1'
     tier: 'Dynamic'
@@ -50,6 +52,7 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   name: '${stackName}-function'
   location: location
+  tags: tags
   kind: 'functionapp'
   properties: {
     httpsOnly: true
