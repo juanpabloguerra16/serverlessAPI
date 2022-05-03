@@ -5,6 +5,7 @@ param prefix string
 param appEnvironment string = 'dev'
 param branch string
 param version string
+param CosmosDBConnection string
 
 var stackName = '${prefix}${appEnvironment}'
 
@@ -23,6 +24,7 @@ module function './function.bicep' = {
     location: location
     stackName: stackName
     tags: tags
+    CosmosDBConnection: CosmosDBConnection
   }
 }
 

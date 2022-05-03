@@ -1,5 +1,6 @@
 param stackName string
 param location string
+param CosmosDBConnection string
 param tags object
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
@@ -64,6 +65,10 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
           value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
+        }
+        {
+          name: 'CosmosDBConnection'
+          value: CosmosDBConnection
         }
       ]
     }
