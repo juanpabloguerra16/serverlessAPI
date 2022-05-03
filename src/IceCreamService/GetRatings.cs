@@ -42,9 +42,6 @@ namespace IceCreamRatingService
                 return new OkObjectResult(ratings);
             }
 
-
-
-
         }
     }
 }
