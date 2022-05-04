@@ -28,6 +28,15 @@ module function './function.bicep' = {
   }
 }
 
+module apim './apim.bicep' = {
+  name: 'deployAPIM'
+  params: {
+    location: location
+    stackName: stackName
+    tags: tags
+  }
+}
+
 output functionApp string = function.outputs.functionApp
 
 
