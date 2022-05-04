@@ -180,6 +180,6 @@ resource getratingbyuser 'Microsoft.ApiManagement/service/apis/operations@2021-0
     description: 'Use this operation to lookup ratings by userId.'
     displayName: 'Lookup rating'
     method: 'GET'
-    urlTemplate: '/{userId}'
+    urlTemplate: '/userid/{userId}'
   }
 }
