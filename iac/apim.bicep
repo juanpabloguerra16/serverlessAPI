@@ -87,7 +87,7 @@ resource getproducts 'Microsoft.ApiManagement/service/apis/operations@2021-08-01
   name:'Products-API'
   properties: {
     description: 'Use this operation to lookup products.'
-    displayName: 'Lookup users'
+    displayName: 'Lookup Products'
     method: 'GET'
     urlTemplate: '/'
   }
