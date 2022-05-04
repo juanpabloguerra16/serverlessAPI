@@ -86,14 +86,34 @@ resource getproducts 'Microsoft.ApiManagement/service/apis/operations@2021-08-01
   parent: productsAPI
   name:'Products-API'
   properties: {
-    description: 'Use this operation to lookup users.'
+    description: 'Use this operation to lookup products.'
     displayName: 'Lookup users'
     method: 'GET'
     urlTemplate: '/'
   }
 }
 
-resource getratingsAPI 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
+resource getproduct 'Microsoft.ApiManagement/service/apis/operations@2021-08-01' = {
+  parent: productsAPI
+  name:'Product-API'
+  properties: {
+    templateParameters: [
+      {
+        name: 'productId'
+        description: 'Use this operation to lookup a specific product.'
+        type: 'string'
+        required: true
+        values: []
+      }
+    ]
+    description: 'Use this operation to lookup users.'
+    displayName: 'Lookup users'
+    method: 'GET'
+    urlTemplate: '/{productId}'
+  }
+}
+
+resource RatingsAPI 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
   parent: apim
   name: 'ratings-api'
   properties: {
@@ -104,7 +124,7 @@ resource getratingsAPI 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
     }
     apiRevision: '1'
     isCurrent: true
-    displayName: 'Ratings GET API'
+    displayName: 'Ratings API'
     path: 'ratings'
     protocols: [
       'http'
@@ -113,24 +133,53 @@ resource getratingsAPI 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
   }
 }
 
-resource postratingsAPI 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
-  parent: apim
-  name: 'rating-api'
+resource createRating 'Microsoft.ApiManagement/service/apis/operations@2021-08-01' = {
+  parent: RatingsAPI
+  name:'Create-Rating'
   properties: {
-    subscriptionRequired: true
-    subscriptionKeyParameterNames: {
-      header: 'Ocp-Apim-Subscription-Key'
-      query: 'subscription-key'
-    }
-    apiRevision: '1'
-    isCurrent: true
-    displayName: 'Ratings POST API'
-    path: 'rating'
-    protocols: [
-      'http'
-      'https'
-    ]
+    description: 'Use this operation to create ratings.'
+    displayName: 'Add ratings'
+    method: 'POST'
+    urlTemplate: 'CreateRatings/'
   }
 }
 
+resource getrating 'Microsoft.ApiManagement/service/apis/operations@2021-08-01' = {
+  parent: RatingsAPI
+  name:'Rating-API'
+  properties: {
+    templateParameters: [
+      {
+        name: 'ratingId'
+        description: 'Use this operation to lookup a specific rating.'
+        type: 'string'
+        required: true
+        values: []
+      }
+    ]
+    description: 'Use this operation to lookup ratings.'
+    displayName: 'Lookup rating'
+    method: 'GET'
+    urlTemplate: '/{ratingId}'
+  }
+}
 
+resource getratingbyuser 'Microsoft.ApiManagement/service/apis/operations@2021-08-01' = {
+  parent: RatingsAPI
+  name:'Rating-UserId-API'
+  properties: {
+    templateParameters: [
+      {
+        name: 'userId'
+        description: 'Use this operation to lookup all ratings by userId.'
+        type: 'string'
+        required: true
+        values: []
+      }
+    ]
+    description: 'Use this operation to lookup ratings by userId.'
+    displayName: 'Lookup rating'
+    method: 'GET'
+    urlTemplate: '/{userId}'
+  }
+}
