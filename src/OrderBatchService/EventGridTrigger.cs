@@ -10,7 +10,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-
+// http://localhost:7071/runtime/webhooks/EventGrid?functionName={functionname}
 namespace OrderBatchService
 {
     public static class EventGridTrigger
