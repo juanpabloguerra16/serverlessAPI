@@ -79,9 +79,9 @@ namespace OrderBatchService
             string batchId = context.GetInput<string>();
             log.LogInformation($"Monitor called for batchId={batchId}");
 
-            var gate1 = context.WaitForExternalEvent($"{batchId}-OrderHeaderDetails.csv");
-            var gate2 = context.WaitForExternalEvent($"{batchId}-OrderLineItems.csv");
-            var gate3 = context.WaitForExternalEvent($"{batchId}-ProductInformation.csv");
+            var gate1 = context.WaitForExternalEvent($"OrderHeaderDetails.csv");
+            var gate2 = context.WaitForExternalEvent($"OrderLineItems.csv");
+            var gate3 = context.WaitForExternalEvent($"ProductInformation.csv");
 
             // All three files must be created before the batch can be processed
             await Task.WhenAll(gate1, gate2, gate3);
@@ -95,7 +95,7 @@ namespace OrderBatchService
             [ActivityTrigger] string batchId,
             ILogger log)
         {
-            // TOOD: Call the API
+            // TODO: Call the API
             // https://petstore.swagger.io/?url=https://serverlessohmanagementapi.trafficmanager.net/api/definition#/Register%20Storage%20Account/combineOrderContent
             log.LogInformation($"Processing batchId={batchId}");
 
