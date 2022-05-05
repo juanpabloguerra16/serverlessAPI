@@ -76,6 +76,13 @@ jobs:
           dotnet build --configuration Release --output ./output
           popd
 
+      - name: 'Resolve Project Dependencies Using Dotnet'
+        shell: bash
+        run: |
+          pushd '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH2 }}'
+          dotnet build --configuration Release --output ./output
+          popd
+
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
         id: fa
