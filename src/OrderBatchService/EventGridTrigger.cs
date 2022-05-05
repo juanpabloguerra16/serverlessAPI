@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.WebSockets;
+using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Azure.Messaging.EventGrid;
 using Microsoft.Azure.WebJobs;
@@ -9,7 +12,9 @@ using Microsoft.Azure.WebJobs.Extensions.EventGrid;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OrderBatchService.Models;
 // http://localhost:7071/runtime/webhooks/EventGrid?functionName={functionname}
 namespace OrderBatchService
 {
@@ -91,13 +96,38 @@ namespace OrderBatchService
         }
 
         [FunctionName("ProcessBatch")]
-        public static void RunProcessBatch(
+        public static async Task RunProcessBatch(
             [ActivityTrigger] string batchId,
+            [CosmosDB(
+                databaseName: "IceCreamRatings",
+                collectionName: "batch",
+                ConnectionStringSetting = "CosmosDBConnection")]IAsyncCollector<dynamic> combinedOrderCosmos,
             ILogger log)
         {
             // TODO: Call the API
             // https://petstore.swagger.io/?url=https://serverlessohmanagementapi.trafficmanager.net/api/definition#/Register%20Storage%20Account/combineOrderContent
             log.LogInformation($"Processing batchId={batchId}");
+
+            var client = new HttpClient();
+            string url = "https://serverlessohmanagementapi.trafficmanager.net/api/order/combineOrderContent";
+            string baseUrl = "https://platformdevjpguerra.blob.core.windows.net/batch/";
+            
+            combineOrder order = new combineOrder
+            {
+                orderHeaderDetailsCSVUrl =  $"{baseUrl}{batchId}-OrderHeaderDetails.csv",
+                orderLineItemsCSVUrl = $"{baseUrl}{batchId}-OrderLineItems.csv",
+                productInformationCSVUrl = $"{baseUrl}{batchId}-ProductInformation.csv",
+            };
+
+            var json = JsonConvert.SerializeObject(order);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync(url, content);
+
+            if (!response.IsSuccessStatusCode)
+                log.LogInformation("Fetching combined csv was unsuccessful");
+            else
+                await combinedOrderCosmos.AddAsync(response);
+
 
         }
 
