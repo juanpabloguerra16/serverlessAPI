@@ -100,7 +100,7 @@ namespace OrderBatchService
             [ActivityTrigger] string batchId,
             [CosmosDB(
                 databaseName: "IceCreamRatings",
-                collectionName: "batch",
+                collectionName: "batch2",
                 ConnectionStringSetting = "CosmosDBConnection")]IAsyncCollector<dynamic> combinedOrderCosmos,
             ILogger log)
         {
@@ -110,7 +110,7 @@ namespace OrderBatchService
 
             var client = new HttpClient();
             string url = "https://serverlessohmanagementapi.trafficmanager.net/api/order/combineOrderContent";
-            string baseUrl = "https://platformdevjpguerra.blob.core.windows.net/batch/";
+            string baseUrl = "https://platformdevjpguerra.blob.core.windows.net/batch2/";
             
             combineOrder order = new combineOrder
             {
@@ -119,14 +119,20 @@ namespace OrderBatchService
                 productInformationCSVUrl = $"{baseUrl}{batchId}-ProductInformation.csv",
             };
 
+            //request
             var json = JsonConvert.SerializeObject(order);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync(url, content);
+            var response = client.PostAsync(url, content).Result;
+
+            // convert response to dynamic object ot be passed as input to cosmosDB
+            var combinedOrder = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+            
+            
 
             if (!response.IsSuccessStatusCode)
                 log.LogInformation("Fetching combined csv was unsuccessful");
             else
-                await combinedOrderCosmos.AddAsync(response);
+                await combinedOrderCosmos.AddAsync(combinedOrder);
 
 
         }
