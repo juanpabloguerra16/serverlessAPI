@@ -105,12 +105,11 @@ namespace OrderBatchService
             ILogger log)
         {
             // TODO: Call the API
-            // https://petstore.swagger.io/?url=https://serverlessohmanagementapi.trafficmanager.net/api/definition#/Register%20Storage%20Account/combineOrderContent
             log.LogInformation($"Processing batchId={batchId}");
 
             var client = new HttpClient();
             string url = "https://serverlessohmanagementapi.trafficmanager.net/api/order/combineOrderContent";
-            string baseUrl = "https://platformdevjpguerra.blob.core.windows.net/batch2/";
+            string baseUrl = "https://platformdevjpguerra.blob.core.windows.net/orders/";
             
             combineOrder order = new combineOrder
             {
@@ -125,14 +124,20 @@ namespace OrderBatchService
             var response = client.PostAsync(url, content).Result;
 
             // convert response to dynamic object ot be passed as input to cosmosDB
-            var combinedOrder = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
+            var combinedOrder =  await response.Content.ReadAsStringAsync();
+
+            var jsonFinal = JsonConvert.SerializeObject(combinedOrder);
             
-            
+
+
 
             if (!response.IsSuccessStatusCode)
                 log.LogInformation("Fetching combined csv was unsuccessful");
             else
-                await combinedOrderCosmos.AddAsync(combinedOrder);
+            {
+                await combinedOrderCosmos.AddAsync(jsonFinal);                               
+            }
+                
 
 
         }

@@ -12,7 +12,6 @@ on:
 env:
   prefix: 'platform'
   AZURE_FUNCTIONAPP_PACKAGE_PATH: './src/IceCreamService/'    # set this to the path to your web app project, defaults to the repository root
-  AZURE_FUNCTIONAPP_PACKAGE_PATH2: './src/OrderBatchService/'
   DOTNET_VERSION: '6.0'  
 
 jobs:
@@ -76,25 +75,10 @@ jobs:
           dotnet build --configuration Release --output ./output
           popd
 
-      - name: 'Resolve Project Dependencies Using Dotnet'
-        shell: bash
-        run: |
-          pushd '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH2 }}'
-          dotnet build --configuration Release --output ./output
-          popd
-
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
         id: fa
         with:
           app-name: ${{ needs.IaC.outputs.AZURE_FUNCTIONAPP_NAME }}
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
-      
-      - name: 'Run Azure Functions Action2'
-        uses: Azure/functions-action@v1
-        id: fa2
-        with:
-          app-name: ${{ needs.IaC.outputs.AZURE_FUNCTIONAPP_NAME }}
-          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH2 }}/output'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
