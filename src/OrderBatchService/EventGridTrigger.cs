@@ -96,14 +96,15 @@ namespace OrderBatchService
         }
 
         [FunctionName("ProcessBatch")]
-        public static async Task RunProcessBatch(
+        public static void RunProcessBatch(
             [ActivityTrigger] string batchId,
             [CosmosDB(
                 databaseName: "IceCreamRatings",
                 collectionName: "batch2",
-                ConnectionStringSetting = "CosmosDBConnection")]IAsyncCollector<dynamic> combinedOrderCosmos,
+                ConnectionStringSetting = "CosmosDBConnection")]out dynamic document,
             ILogger log)
         {
+             
             // TODO: Call the API
             log.LogInformation($"Processing batchId={batchId}");
 
@@ -123,21 +124,16 @@ namespace OrderBatchService
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = client.PostAsync(url, content).Result;
 
-            // convert response to dynamic object ot be passed as input to cosmosDB
-            var combinedOrder =  await response.Content.ReadAsStringAsync();
-
-            var jsonFinal = JsonConvert.SerializeObject(combinedOrder);
             
+            var combinedOrder =  response.Content.ReadAsStringAsync();
 
-
-
-            if (!response.IsSuccessStatusCode)
-                log.LogInformation("Fetching combined csv was unsuccessful");
-            else
-            {
-                await combinedOrderCosmos.AddAsync(jsonFinal);                               
-            }
-                
+            
+            //log.LogInformation("Fetching combined csv was unsuccessful");
+            
+            document = new { Description = combinedOrder, id = Guid.NewGuid() };
+                                             
+            
+                    
 
 
         }

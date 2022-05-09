@@ -6,6 +6,7 @@ param appEnvironment string = 'dev'
 param branch string
 param version string
 param CosmosDBConnection string
+param EHConnectionString string
 
 var stackName = '${prefix}${appEnvironment}'
 
@@ -25,6 +26,7 @@ module function './function.bicep' = {
     stackName: stackName
     tags: tags
     CosmosDBConnection: CosmosDBConnection
+    EHConnectionString: EHConnectionString
   }
 }
 

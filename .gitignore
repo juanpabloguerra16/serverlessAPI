@@ -15,6 +15,7 @@
 local.settings.json
 # host.json
 # *.local.json
+serviceDependencies.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -354,3 +355,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+src/PosSalesProcessor/Properties/serviceDependencies.local.json
+src/PosSalesProcessor/Properties/serviceDependencies.json

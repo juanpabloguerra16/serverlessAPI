@@ -1,6 +1,7 @@
 param stackName string
 param location string
 param CosmosDBConnection string
+param EHConnectionString string
 param tags object
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
@@ -69,6 +70,10 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'CosmosDBConnection'
           value: CosmosDBConnection
+        }
+        {
+          name: 'EHConnectionString'
+          value: EHConnectionString
         }
       ]
     }
