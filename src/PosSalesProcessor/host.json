@@ -7,13 +7,15 @@
         "maxBatchSize": 64,
         "prefetchCount": 256
       }
-    },
-    "logging": {
-      "applicationInsights": {
-        "samplingSettings": {
-          "isEnabled": true,
-          "excludedTypes": "Request"
-        }
+    }
+  },
+  "logging": {
+    "applicationInsights": {
+      "samplingSettings": {
+        "isEnabled": true,
+        "excludedTypes": "Request"
       }
     }
   }
+}
+
