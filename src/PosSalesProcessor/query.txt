@@ -1,0 +1,5 @@
+requests
+| where timestamp > ago(1h)
+| summarize count() by cloud_RoleInstance, bin(timestamp, 1min)
+| summarize ['instances'] = count() by bin(timestamp, 1min)
+| render timechart

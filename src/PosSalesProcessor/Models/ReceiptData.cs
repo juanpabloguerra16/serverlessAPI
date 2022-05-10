@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace PosSalesProcessor.Models
 {
+    
     public class ReceiptData
     {
         public int totalItems { get; set; }
@@ -15,4 +16,5 @@ namespace PosSalesProcessor.Models
         public string storeLocation { get; set; }
         public string receiptUrl { get; set; }
     }
+
 }

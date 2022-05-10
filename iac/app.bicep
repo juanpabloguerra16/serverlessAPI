@@ -7,6 +7,8 @@ param branch string
 param version string
 param CosmosDBConnection string
 param EHConnectionString string
+param BlobConnectionString string
+param ServiceBusConnectionString string
 
 var stackName = '${prefix}${appEnvironment}'
 
@@ -27,6 +29,8 @@ module function './function.bicep' = {
     tags: tags
     CosmosDBConnection: CosmosDBConnection
     EHConnectionString: EHConnectionString
+    ServiceBusConnectionString: ServiceBusConnectionString
+    BlobConnectionString: BlobConnectionString
   }
 }
 

@@ -21,7 +21,7 @@ namespace PosSalesProcessor.Models
         public string locationName { get; set; }
         public string locationAddress { get; set; }
         public string locationPostcode { get; set; }
-        public string totalCost { get; set; }
+        public decimal totalCost { get; set; }
         public string totalTax { get; set; }
         public string receiptUrl { get; set; }
     }

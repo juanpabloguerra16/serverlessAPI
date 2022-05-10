@@ -2,6 +2,8 @@ param stackName string
 param location string
 param CosmosDBConnection string
 param EHConnectionString string
+param ServiceBusConnectionString string
+param BlobConnectionString string
 param tags object
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
@@ -74,6 +76,14 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         {
           name: 'EHConnectionString'
           value: EHConnectionString
+        }
+        {
+          name: 'ServiceBusConnectionString'
+          value: ServiceBusConnectionString
+        }
+        {
+          name: 'BlobConnectionString'
+          value: BlobConnectionString
         }
       ]
     }

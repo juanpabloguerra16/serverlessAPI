@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IceCreamRatingService", "Ic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderBatchService", "OrderBatchService\OrderBatchService.csproj", "{CD7B68EA-5128-429B-9847-C72EDE13E49C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PosSalesProcessor", "PosSalesProcessor\PosSalesProcessor.csproj", "{F07AC8C0-426A-4535-9D6E-BC307AA998A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PosSalesProcessor", "PosSalesProcessor\PosSalesProcessor.csproj", "{F07AC8C0-426A-4535-9D6E-BC307AA998A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

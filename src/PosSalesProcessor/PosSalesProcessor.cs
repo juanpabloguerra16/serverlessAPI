@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.EventHubs;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
@@ -24,6 +25,11 @@ namespace PosSalesProcessor
         {
             var exceptions = new List<Exception>();
 
+            // SB details
+            string TopicName = "orders";
+            var client = new ServiceBusClient(Environment.GetEnvironmentVariable("ServiceBusConnectionString"));
+            ServiceBusSender sender = client.CreateSender(TopicName);
+
             foreach (EventData eventData in events)
             {
                 try
@@ -31,6 +37,26 @@ namespace PosSalesProcessor
                     string messageBody = Encoding.UTF8.GetString(eventData.Body.Array, eventData.Body.Offset, eventData.Body.Count);
 
                     Transaction receipt = JsonConvert.DeserializeObject<Transaction>(messageBody);
+
+                    if (!string.IsNullOrEmpty(receipt.header.receiptUrl))
+                    {
+                        ReceiptData receiptData = new ReceiptData
+                        {
+                            receiptUrl = receipt.header.receiptUrl,
+                            salesDate = receipt.header.dateTime,
+                            salesNumber = receipt.header.salesNumber,
+                            storeLocation = receipt.header.locationName,
+                            totalCost = receipt.header.totalCost,
+                            totalItems = receipt.details.Length
+                        };
+
+                        var message = new ServiceBusMessage(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(receiptData)));
+                        message.ApplicationProperties.Add("totalCost", receiptData.totalCost);
+                        message.ContentType = "application/json";
+                        await sender.SendMessageAsync(message);
+
+                    }
+
 
                     await transaction.AddAsync(receipt);
 
