@@ -19,7 +19,7 @@ namespace PosSalesProcessor
             [EventHubTrigger("serverlessapi", Connection = "EHConnectionString")] EventData[] events,
             [CosmosDB(
                 databaseName: "IceCreamRatings",
-                collectionName: "pos",
+                collectionName: "pos2",
                 ConnectionStringSetting = "CosmosDBConnection")]IAsyncCollector<Transaction> transaction,
             ILogger log)
         {
